@@ -2,10 +2,28 @@
   "name": "crud-api",
   "version": "1.0.0",
   "description": "RS crud api",
-  "main": "index.js",
+  "main": "./src/index.ts",
   "scripts": {
-    "start": "npm run start"
+    "start": "npm run start",
+    "start:dev": "cross-env NODE_ENV=development NODE_NO_WARNINGS=1 ts-node-dev --transpile-only src/index.ts",
+    "start:prod": "cross-env NODE_ENV=production npm run build && node ./dist/bundle.js",
+    "build": "webpack"
   },
   "author": "malDel09",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.11.16",
+    "@types/uuid": "^9.0.8",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.4.1",
+    "eslint": "^8.56.0",
+    "nodemon": "^3.0.3",
+    "prettier": "^3.2.5",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.3.3",
+    "uuid": "^9.0.1",
+    "webpack": "^5.90.1",
+    "webpack-cli": "^5.1.4"
+  }
 }
