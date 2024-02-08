@@ -1,0 +1,11 @@
+{
+  "name": "crud-api",
+  "version": "1.0.0",
+  "description": "RS crud api",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm run start"
+  },
+  "author": "malDel09",
+  "license": "ISC"
+}
