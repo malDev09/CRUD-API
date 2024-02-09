@@ -1,3 +1,5 @@
+import { v4 as uuid } from "uuid";
+
 export class UsersRepository {
   constructor(private users: User[]){}
 
@@ -16,4 +18,35 @@ export class UsersRepository {
     });
   }
 
+  async create(user: User): Promise<User> {
+    return new Promise((resolve) => {
+      const newUser = { ...user, id: uuid() };
+      this.users.push(newUser);
+      resolve(newUser);
+    });
+  }
+
+  async update(id: string, data: User): Promise<User> {
+    return new Promise((resolve, reject) => {
+        const index = this.users.findIndex(user => user.id === id);
+        if (index !== -1) {
+            this.users[index] = { ...this.users[index], ...data };
+            resolve(this.users[index]);
+        } else {
+            reject('error - user not found');
+        }
+    });
+}
+
+async delete(id: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+        const index = this.users.findIndex(user => user.id === id);
+        if (index !== -1) {
+            this.users.splice(index, 1);
+            resolve();
+        } else {
+            reject('error - user not found');
+        }
+    });
+}
 }
