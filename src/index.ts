@@ -1,12 +1,29 @@
-import { createServer } from "http";
-import { router } from "./router/router";
+import cluster from 'cluster';
+import { Server, createServer } from 'http';
+import { cpus } from 'os';
+import { router } from './router/router';
+import { UsersRepository } from './users/repository';
 
-const DEFAULT_PORT = 4000
-const PORT = process.env.PORT || DEFAULT_PORT
+const DEFAULT_PORT = 4000;
+const numCPUs = cpus().length;
 
-const server = createServer(router);
+let server: Server;
+const usersRepository = new UsersRepository([]); 
 
+if (process.env.MODE === 'cluster' && cluster.isPrimary) {
+    console.log(`Master ${process.pid} is running`);
 
-server.listen(PORT, () => {
-  console.log(`listen port ${PORT}`)
-})
+    for (let i = 0; i < numCPUs; i++) {
+        cluster.fork({ workerId: i + 1, usersRepository: JSON.stringify(usersRepository) }); 
+    }
+} else {
+    const workerId = Number(process.env.workerId);
+    const PORT = DEFAULT_PORT + (workerId || 0);
+    server = createServer(router(usersRepository)); 
+
+    server.listen(PORT, () => {
+        console.log(`Worker ${process.pid} started and listening on port ${PORT}`);
+    });
+}
+
+export { server };
