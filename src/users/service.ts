@@ -1,5 +1,6 @@
 import { IncomingMessage } from 'http';
 import { getBody } from '../helpers';
+import { User } from '../types';
 import { UsersRepository } from './repository';
 
 export class UsersService {
